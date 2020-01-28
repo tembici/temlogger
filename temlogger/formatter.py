@@ -12,7 +12,6 @@ class StackDriverFormatter(LogstashFormatterBase):
             'host': self.host,
             'path': record.pathname,
             'tags': self.tags,
-            'type': self.message_type,
 
             # Extra Fields
             'level': record.levelname,
