@@ -82,11 +82,11 @@ class TestLogstashLogger(unittest.TestCase):
 
         self.assertEqual(logger.logging_provider, 'logstash')
 
-        logger.handle = mock.Mock()
+        logger._log = mock.Mock()
 
         logger.info('Logstash log')
 
-        logger.handle.assert_called_once()
+        logger._log.assert_called_once_with(logging.INFO, 'Logstash log', ())
 
 
 class TestStackDriverLogger(unittest.TestCase):
@@ -127,8 +127,8 @@ class TestStackDriverLogger(unittest.TestCase):
 
         self.assertEqual(logger.logging_provider, 'stackdriver')
 
-        logger.handle = mock.Mock()
+        logger._log = mock.Mock()
 
         logger.info('StackDriver log')
 
-        logger.handle.assert_called_once()
+        logger._log.assert_called_once_with(logging.INFO, 'StackDriver log', ())
