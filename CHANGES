@@ -1,0 +1,12 @@
+Version 0.1.0
+- 2020-01-28 13:53:16 -0300 - Nielson Santana - chore: disable test for python==3.5
+- 2020-01-28 14:49:36 -0200 - tadashi - test: unit tests
+- 2020-01-28 13:12:44 -0300 - Nielson Santana - tests: fix and add new tests
+- 2020-01-28 10:45:46 -0300 - Nielson Santana - refactor: remove type key
+- 2020-01-27 19:48:41 -0300 - Felipe Brigatto - Create pythonpackage.yml
+- 2020-01-27 19:45:18 -0300 - Felipe Brigatto - created requirements.txt
+- 2020-01-27 19:22:08 -0300 - Nielson Santana - feat: add log handler to ELK and StackDriver
+- 2020-01-27 20:21:25 -0200 - tadashi - test: add initial tests
+- 2020-01-27 20:19:35 -0200 - tadashi - adjust readme
+- 2020-01-27 20:17:24 -0200 - tadashi - First commit with readme and setup.py
+
