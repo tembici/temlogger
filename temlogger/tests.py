@@ -5,37 +5,34 @@ import temlogger
 from unittest import mock
 
 
-class GetLoggerTestCase(unittest.TestCase):
+def clean_temlogger_config():
+    environments_to_clean = [
+        'LOGGING_PROVIDER',
+        'LOGGING_URL',
+        'LOGGING_PORT'
+    ]
+    for env in environments_to_clean:
+        if env in os.environ:
+            del os.environ[env]
+
+    temlogger.config.clear()
+
+
+class TestLogstashLogger(unittest.TestCase):
 
     def tearDown(self):
         """
         Clean config between tests
         """
-        environments_to_clean = [
-            'LOGGING_PROVIDER',
-            'LOGGING_URL',
-            'LOGGING_PORT'
-        ]
-        for env in environments_to_clean:
-            if env in os.environ:
-                del os.environ[env]
+        clean_temlogger_config()
 
-        temlogger.config.set_logging_provider('')
-        temlogger.config.set_logging_url('')
-        temlogger.config.set_logging_port('')
-
-    def test_getlogger_without_set_logging_provider_return_none(self):
+    def test_get_default_logger_when_logging_provider_is_not_set(self):
         logger = temlogger.getLogger('test')
 
         self.assertTrue(isinstance(logger, logging.Logger))
+        self.assertEqual(logger.logging_provider, 'default')
 
-    def test_can_getlogger_logstash(self):
-        logger = temlogger.getLogger('logstash-1')
-        logger.logging_provider = 'logstash'
-        logger.logstash_url = 'localhost'
-        logger.logstash_port = 5000
-
-    def test_get_logstash_logger_passing_logstash_envs(self):
+    def test_get_logstash_logger_passing_envs_by_environ(self):
         os.environ['LOGGING_PROVIDER'] = 'logstash'
         os.environ['LOGGING_URL'] = 'localhost'
         os.environ['LOGGING_PORT'] = '5000'
@@ -51,10 +48,63 @@ class GetLoggerTestCase(unittest.TestCase):
         logger = temlogger.getLogger('logstash-3')
         self.assertEqual(logger.logging_provider, 'logstash')
 
-    def test_get_stackdriver_logger_passing_envs_as_parameter(self):
-        temlogger.config.set_logging_provider('stackdriver')
+    def test_get_logstash_logger_and_log_info(self):
+        """"""
+        temlogger.config.set_logging_provider('logstash')
         temlogger.config.set_logging_url('localhost')
         temlogger.config.set_logging_port('5000')
 
+        logger = temlogger.getLogger('logstash-3')
+
+        self.assertEqual(logger.logging_provider, 'logstash')
+
+        logger.handle = mock.Mock()
+
+        logger.info('Logstash log')
+
+        logger.handle.assert_called_once()
+
+
+class TestStackDriverLogger(unittest.TestCase):
+    """
+    Based on official tests:
+    https://github.com/googleapis/google-cloud-python/blob/master/logging/tests/unit/test_logger.py
+    """
+
+    def tearDown(self):
+        """
+        Clean config between tests
+        """
+        clean_temlogger_config()
+
+    @mock.patch("google.cloud.logging.Client")
+    def test_get_stackdriver_logger_passing_envs_by_environ(self, mocked_cls):
+        os.environ['LOGGING_PROVIDER'] = 'stackdriver'
+
         logger = temlogger.getLogger('stackdriver-1')
+
+        self.assertTrue(isinstance(logger, logging.Logger))
         self.assertEqual(logger.logging_provider, 'stackdriver')
+
+    @mock.patch("google.cloud.logging.Client")
+    def test_get_stackdriver_logger_passing_envs_as_parameter(self, mocked_cls):
+        """"""
+        temlogger.config.set_logging_provider('stackdriver')
+
+        logger = temlogger.getLogger('stackdriver-2')
+        self.assertEqual(logger.logging_provider, 'stackdriver')
+
+    @mock.patch("google.cloud.logging.Client")
+    def test_get_stackdriver_logger_and_log_info(self, mocked_cls):
+        """"""
+        temlogger.config.set_logging_provider('stackdriver')
+
+        logger = temlogger.getLogger('stackdriver-2')
+
+        self.assertEqual(logger.logging_provider, 'stackdriver')
+
+        logger.handle = mock.Mock()
+
+        logger.info('StackDriver log')
+
+        logger.handle.assert_called_once()
