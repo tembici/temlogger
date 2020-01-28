@@ -18,9 +18,9 @@ def clean_temlogger_config():
     temlogger.config.clear()
 
 
-class TestLogstashLogger(unittest.TestCase):
+class TestDefaultLogger(unittest.TestCase):
 
-    def tearDown(self):
+    def setUp(self):
         """
         Clean config between tests
         """
@@ -29,6 +29,30 @@ class TestLogstashLogger(unittest.TestCase):
     def test_get_default_logger_when_logging_provider_is_not_set(self):
         logger = temlogger.getLogger('test')
 
+        self.assertTrue(isinstance(logger, logging.Logger))
+        self.assertEqual(logger.logging_provider, 'default')
+
+
+class TestLogstashLogger(unittest.TestCase):
+
+    def setUp(self):
+        """
+        Clean config between tests
+        """
+        clean_temlogger_config()
+
+    def test_switch_logger(self):
+        logger = temlogger.getLogger('switch-logger-1')
+        self.assertTrue(isinstance(logger, logging.Logger))
+        self.assertEqual(logger.logging_provider, 'default')
+
+        temlogger.config.set_logging_provider('logstash')
+        logger = temlogger.getLogger('switch-logger-1')
+        self.assertTrue(isinstance(logger, logging.Logger))
+        self.assertEqual(logger.logging_provider, 'logstash')
+
+        temlogger.config.set_logging_provider('default')
+        logger = temlogger.getLogger('switch-logger-1')
         self.assertTrue(isinstance(logger, logging.Logger))
         self.assertEqual(logger.logging_provider, 'default')
 
@@ -71,7 +95,7 @@ class TestStackDriverLogger(unittest.TestCase):
     https://github.com/googleapis/google-cloud-python/blob/master/logging/tests/unit/test_logger.py
     """
 
-    def tearDown(self):
+    def setUp(self):
         """
         Clean config between tests
         """

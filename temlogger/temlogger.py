@@ -20,32 +20,33 @@ class LoggingConfig:
         self._logging_provider = value
 
     def get_logging_provider(self):
-        return self._logging_provider or os.getenv('LOGGING_PROVIDER', '').lower()
+        return self._logging_provider.lower() or os.getenv('LOGGING_PROVIDER', '').lower()
 
     def set_logging_url(self, value):
         self._logging_url = value
 
     def get_logging_url(self):
-        return self._logging_url or os.getenv('LOGGING_URL', '').lower()
+        return self._logging_url or os.getenv('LOGGING_URL', '')
 
     def set_logging_port(self, value):
         self._logging_port = value
 
     def get_logging_port(self):
-        return self._logging_port or os.getenv('LOGGING_PORT', '').lower()
+        return self._logging_port or os.getenv('LOGGING_PORT', '')
+
+    def clear(self):
+        self._logging_provider = ''
+        self._logging_url = ''
+        self._logging_port = ''
 
 
 class LoggerManager:
-    _generated_loggers = []
 
     def get_logger(self, name):
         logging_provider = config.get_logging_provider()
 
-        # prevent register another handler to logger
-        if name in self._generated_loggers:
-            return logging.getLogger(name)
-        else:
-            self._generated_loggers.append(name)
+        logger = logging.getLogger(name)
+        logger.handlers.clear()
 
         if logging_provider == LoggingProvider.LOGSTASH:
             return self.get_logger_logstash(name)
