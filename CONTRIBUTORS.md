@@ -4,6 +4,7 @@ List of contributors (bug reports, fixes, suggestions, anything) to **temlogger*
 
 * Tadashi Uema
 * Nielson Santana
+* Felipe Brigatto
 
 Did I miss anyone?
 
