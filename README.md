@@ -19,11 +19,7 @@
 
 Use this to specify tag version:
 
-<<<<<<< Updated upstream
     pip install -e git+https://github.com/tembici/temlogger.git@v0.2.0#egg=temlogger
-=======
-    pip install -e git+https://github.com/tembici/temlogger.git@v0.1.0#egg=temlogger
->>>>>>> Stashed changes
 
 
 ## Usage
