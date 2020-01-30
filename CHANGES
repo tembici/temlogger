@@ -1,3 +1,14 @@
+Version 0.2.0:
+ - 2020-01-30 13:34:55 #c31e338 - Nielson Santana - Add bumpversion.sh
+ - 2020-01-30 13:34:30 #c38453c - Nielson Santana - Improves on code and update documentation
+ - 2020-01-30 13:28:17 #034d019 - Nielson Santana - Update documentation
+ - 2020-01-29 19:12:11 #f39371e - Nielson Santana - add docstring to __init__.py
+ - 2020-01-29 19:10:24 #c766691 - Nielson Santana - chore: python3-logstash as required
+ - 2020-01-29 18:50:54 #993a690 - Nielson Santana - chore: add pyproject.toml
+ - 2020-01-29 12:55:29 #837a0b6 - Nielson Santana - chore: update CONTRIBUTORS.md
+ - 2020-01-28 16:09:53 -0200 #c2a6e13 - tadashi - chore: add python 3.8 version
+ - 2020-01-28 15:05:34 #e889a7c - Nielson Santana - tests: fix test for python==3.5
+
 Version 0.1.0
 - 2020-01-28 13:53:16 -0300 - Nielson Santana - chore: disable test for python==3.5
 - 2020-01-28 14:49:36 -0200 - tadashi - test: unit tests
