@@ -46,6 +46,9 @@ class LoggerManager:
         logging_provider = config.get_logging_provider()
 
         logger = logging.getLogger(name)
+        if hasattr(logger, 'logging_provider') and logger.logging_provider == logging_provider:
+            return logger
+
         logger.handlers.clear()
 
         if logging_provider == LoggingProvider.LOGSTASH:

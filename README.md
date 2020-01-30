@@ -19,7 +19,11 @@
 
 Use this to specify tag version:
 
+<<<<<<< Updated upstream
     pip install -e git+https://github.com/tembici/temlogger.git@v0.2.0#egg=temlogger
+=======
+    pip install -e git+https://github.com/tembici/temlogger.git@v0.1.0#egg=temlogger
+>>>>>>> Stashed changes
 
 
 ## Usage
@@ -54,9 +58,8 @@ extra = {
 test_logger.info('temlogger: test with extra fields', extra=extra)
 ```
 
-Passing parameters directly to temlogger:
+Example passing parameters directly to temlogger:
 
-### For example:
 ```python
 import sys
 import temlogger
@@ -111,9 +114,7 @@ extra = {
 test_logger.info('temlogger: test with extra fields', extra=extra)
 ```
 
-
-
-## Using with Django
+### Using with Django
 
 Modify your `settings.py` to integrate temlogger with Django's logging:
 
