@@ -1,3 +1,6 @@
+Version 0.2.1:
+ - 2020-01-30 14:54:20 #b6829ad - Nielson Santana - chore: add setup.py
+
 Version 0.2.0:
  - 2020-01-30 13:50:48 #91a02f6 - Nielson Santana - Version bump to 0.2.0
  - 2020-01-30 13:34:55 #c31e338 - Nielson Santana - Add bumpversion.sh

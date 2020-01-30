@@ -1,10 +1,10 @@
 from distutils.core import setup
-from temlogger import ___version__
+from temlogger import __version__
 
 setup(
     name='temlogger',
     packages=['temlogger'],
-    version=___version__,
+    version=__version__,
     description='Python logging handler for Logstash and StackDriver.',
     long_description=open('README.md').read(),
     url='https://github.com/tembici/temlogger',
