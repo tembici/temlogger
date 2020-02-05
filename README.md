@@ -19,7 +19,7 @@
 
 Use this to specify tag version:
 
-    pip install -e git+https://github.com/tembici/temlogger.git@v0.2.0#egg=temlogger
+    pip install -e git+https://github.com/tembici/temlogger.git@<tag-version>#egg=temlogger
 
 
 ## Usage
