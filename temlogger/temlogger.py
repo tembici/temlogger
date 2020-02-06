@@ -1,8 +1,6 @@
 import logging
 import os
 
-from .formatter import StackDriverFormatter
-
 
 class LoggingProvider:
     STACK_DRIVER = 'stackdriver'
@@ -84,6 +82,7 @@ class LoggerManager:
         Docs: https://googleapis.dev/python/logging/latest/handlers.html
         """
         import google.cloud.logging
+        from .formatter import StackDriverFormatter
 
         logger = logging.getLogger(name)
         logger.logging_provider = LoggingProvider.STACK_DRIVER
