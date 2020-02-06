@@ -1,5 +1,4 @@
 import logging
-import logstash
 import os
 
 from .formatter import StackDriverFormatter
@@ -65,6 +64,8 @@ class LoggerManager:
         return logger
 
     def get_logger_logstash(self, name):
+        import logstash
+
         loggin_url = config.get_logging_url()
         logging_port = config.get_logging_port()
 
