@@ -1,3 +1,7 @@
+Version 0.2.4:
+ - 2020-02-06 16:56:01 #a604a4d - Nielson Santana - Lazy import of StackDriverFormatter
+ - 2020-02-06 16:52:44 #ca67e71 - Nielson Santana - Remove pyproject.toml and lazy import of logstash
+
 Version 0.2.3:
 
 
