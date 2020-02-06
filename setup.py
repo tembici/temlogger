@@ -1,5 +1,7 @@
 from distutils.core import setup
-from temlogger import __version__
+
+__version__ = '0.2.3'
+
 
 setup(
     name='temlogger',
