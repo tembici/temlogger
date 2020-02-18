@@ -30,6 +30,7 @@ Using environment variables:
 export LOGGING_PROVIDER='logstash'
 export LOGGING_URL='localhost'
 export LOGGING_PORT='5000'
+export LOGGING_ENVIRONMENT='staging'
 ```
 
 ```python
@@ -60,11 +61,10 @@ Example passing parameters directly to temlogger:
 import sys
 import temlogger
 
-host = 'localhost'
-
 temlogger.config.set_logging_provider('logstash')
 temlogger.config.set_logging_url('localhost')
 temlogger.config.set_logging_port(5000)
+temlogger.config.set_logging_environment('staging')
 
 test_logger = temlogger.getLogger('python-logstash-logger')
 
@@ -122,6 +122,7 @@ host = 'localhost'
 temlogger.config.set_logging_provider('logstash')
 temlogger.config.set_logging_url('localhost')
 temlogger.config.set_logging_port(5000)
+temlogger.config.set_logging_environment('staging')
 
 ```
 
