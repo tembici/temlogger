@@ -1,4 +1,3 @@
-import logstash
 from logstash.formatter import LogstashFormatterBase
 
 

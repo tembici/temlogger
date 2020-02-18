@@ -7,9 +7,10 @@ from unittest import mock
 
 def clean_temlogger_config():
     environments_to_clean = [
-        'LOGGING_PROVIDER',
-        'LOGGING_URL',
-        'LOGGING_PORT'
+        'TEMLOGGER_PROVIDER',
+        'TEMLOGGER_URL',
+        'TEMLOGGER_PORT'
+        'TEMLOGGER_ENVIRONMENT'
     ]
     for env in environments_to_clean:
         if env in os.environ:
@@ -46,37 +47,38 @@ class TestLogstashLogger(unittest.TestCase):
         self.assertTrue(isinstance(logger, logging.Logger))
         self.assertEqual(logger.logging_provider, 'default')
 
-        temlogger.config.set_logging_provider('logstash')
+        temlogger.config.set_provider('logstash')
         logger = temlogger.getLogger('switch-logger-1')
         self.assertTrue(isinstance(logger, logging.Logger))
         self.assertEqual(logger.logging_provider, 'logstash')
 
-        temlogger.config.set_logging_provider('default')
+        temlogger.config.set_provider('default')
         logger = temlogger.getLogger('switch-logger-1')
         self.assertTrue(isinstance(logger, logging.Logger))
         self.assertEqual(logger.logging_provider, 'default')
 
     def test_get_logstash_logger_passing_envs_by_environ(self):
-        os.environ['LOGGING_PROVIDER'] = 'logstash'
-        os.environ['LOGGING_URL'] = 'localhost'
-        os.environ['LOGGING_PORT'] = '5000'
+        os.environ['TEMLOGGER_PROVIDER'] = 'logstash'
+        os.environ['TEMLOGGER_URL'] = 'localhost'
+        os.environ['TEMLOGGER_PORT'] = '5000'
 
         logger = temlogger.getLogger('logstash-2')
         self.assertEqual(logger.logging_provider, 'logstash')
 
     def test_get_logstash_logger_passing_envs_as_parameter(self):
-        temlogger.config.set_logging_provider('logstash')
-        temlogger.config.set_logging_url('localhost')
-        temlogger.config.set_logging_port('5000')
+        temlogger.config.set_provider('logstash')
+        temlogger.config.set_url('localhost')
+        temlogger.config.set_port('5000')
+        temlogger.config.set_environment('staging')
 
         logger = temlogger.getLogger('logstash-3')
         self.assertEqual(logger.logging_provider, 'logstash')
 
     def test_get_logstash_logger_and_log_info(self):
         """"""
-        temlogger.config.set_logging_provider('logstash')
-        temlogger.config.set_logging_url('localhost')
-        temlogger.config.set_logging_port('5000')
+        temlogger.config.set_provider('logstash')
+        temlogger.config.set_url('localhost')
+        temlogger.config.set_port('5000')
 
         logger = temlogger.getLogger('logstash-3')
 
@@ -103,7 +105,7 @@ class TestStackDriverLogger(unittest.TestCase):
 
     @mock.patch("google.cloud.logging.Client")
     def test_get_stackdriver_logger_passing_envs_by_environ(self, mocked_cls):
-        os.environ['LOGGING_PROVIDER'] = 'stackdriver'
+        os.environ['TEMLOGGER_PROVIDER'] = 'stackdriver'
 
         logger = temlogger.getLogger('stackdriver-1')
 
@@ -113,7 +115,7 @@ class TestStackDriverLogger(unittest.TestCase):
     @mock.patch("google.cloud.logging.Client")
     def test_get_stackdriver_logger_passing_envs_as_parameter(self, mocked_cls):
         """"""
-        temlogger.config.set_logging_provider('stackdriver')
+        temlogger.config.set_provider('stackdriver')
 
         logger = temlogger.getLogger('stackdriver-2')
         self.assertEqual(logger.logging_provider, 'stackdriver')
@@ -121,7 +123,7 @@ class TestStackDriverLogger(unittest.TestCase):
     @mock.patch("google.cloud.logging.Client")
     def test_get_stackdriver_logger_and_log_info(self, mocked_cls):
         """"""
-        temlogger.config.set_logging_provider('stackdriver')
+        temlogger.config.set_provider('stackdriver')
 
         logger = temlogger.getLogger('stackdriver-2')
 
@@ -131,4 +133,5 @@ class TestStackDriverLogger(unittest.TestCase):
 
         logger.info('StackDriver log')
 
-        logger._log.assert_called_once_with(logging.INFO, 'StackDriver log', ())
+        logger._log.assert_called_once_with(
+            logging.INFO, 'StackDriver log', ())
