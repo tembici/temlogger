@@ -1,5 +1,5 @@
 # TemLogger
-**Temlogger** is a library with a purpose to capture and send logs to ELK, StackDriver.
+**Temlogger** is a library to capture and send logs to ELK, StackDriver.
 
 ## Logging Providers
 
@@ -27,9 +27,10 @@ Use this to specify tag version:
 Using environment variables:
 
 ```bash
-export LOGGING_PROVIDER='logstash'
-export LOGGING_URL='localhost'
-export LOGGING_PORT='5000'
+export TEMLOGGER_PROVIDER='logstash'
+export TEMLOGGER_URL='localhost'
+export TEMLOGGER_PORT='5000'
+export TEMLOGGER_ENVIRONMENT='staging'
 ```
 
 ```python
@@ -60,11 +61,10 @@ Example passing parameters directly to temlogger:
 import sys
 import temlogger
 
-host = 'localhost'
-
-temlogger.config.set_logging_provider('logstash')
-temlogger.config.set_logging_url('localhost')
-temlogger.config.set_logging_port(5000)
+temlogger.config.set_provider('logstash')
+temlogger.config.set_url('localhost')
+temlogger.config.set_port(5000)
+temlogger.config.set_environment('staging')
 
 test_logger = temlogger.getLogger('python-logstash-logger')
 
@@ -85,7 +85,7 @@ test_logger.info('temlogger: test with extra fields', extra=extra)
 ### Example with StackDriver
 
 ```bash
-export LOGGING_PROVIDER='stackdriver'
+export TEMLOGGER_PROVIDER='stackdriver'
 # https://cloud.google.com/docs/authentication/getting-started
 export GOOGLE_APPLICATION_CREDENTIALS='<path to json>'
 ```
@@ -119,9 +119,10 @@ import temlogger
 
 host = 'localhost'
 
-temlogger.config.set_logging_provider('logstash')
-temlogger.config.set_logging_url('localhost')
-temlogger.config.set_logging_port(5000)
+temlogger.config.set_provider('logstash')
+temlogger.config.set_url('localhost')
+temlogger.config.set_port(5000)
+temlogger.config.set_environment('staging')
 
 ```
 
