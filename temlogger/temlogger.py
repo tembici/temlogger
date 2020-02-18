@@ -12,6 +12,7 @@ class LoggingConfig:
     _logging_provider = ''
     _logging_url = ''
     _logging_port = ''
+    _logging_environment = ''
 
     def set_logging_provider(self, value):
         self._logging_provider = value
@@ -31,10 +32,17 @@ class LoggingConfig:
     def get_logging_port(self):
         return self._logging_port or os.getenv('LOGGING_PORT', '')
 
+    def set_logging_environment(self, value):
+        self._logging_environment = value
+
+    def get_logging_environment(self):
+        return self._logging_environment or os.getenv('LOGGING_ENVIRONMENT', '')
+
     def clear(self):
         self._logging_provider = ''
         self._logging_url = ''
         self._logging_port = ''
+        self._logging_environment = ''
 
 
 class LoggerManager:
@@ -63,17 +71,19 @@ class LoggerManager:
 
     def get_logger_logstash(self, name):
         import logstash
+        from .formatter import LogstashFormatter
 
         loggin_url = config.get_logging_url()
         logging_port = config.get_logging_port()
+        logging_environment = config.get_logging_environment()
 
         logger = logging.getLogger(name)
         logger.logging_provider = LoggingProvider.LOGSTASH
 
         logger.setLevel(logging.INFO)
-        logger.addHandler(
-            logstash.TCPLogstashHandler(
-                loggin_url, logging_port, version=1))
+        handler = logstash.TCPLogstashHandler(loggin_url, logging_port, version=1)
+        handler.setFormatter(LogstashFormatter(environment=logging_environment))
+        logger.addHandler(handler)
 
         return logger
 
@@ -84,6 +94,8 @@ class LoggerManager:
         import google.cloud.logging
         from .formatter import StackDriverFormatter
 
+        logging_environment = config.get_logging_environment()
+
         logger = logging.getLogger(name)
         logger.logging_provider = LoggingProvider.STACK_DRIVER
 
@@ -91,7 +103,7 @@ class LoggerManager:
 
         handler = client.get_default_handler()
         # Setup logger explicitly with this handler
-        handler.setFormatter(StackDriverFormatter())
+        handler.setFormatter(StackDriverFormatter(environment=logging_environment))
         logger.setLevel(logging.INFO)
         logger.addHandler(handler)
 
