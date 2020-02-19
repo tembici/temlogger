@@ -1,12 +1,12 @@
 Version 0.2.5:
+ - 2020-02-18 19:47:39 #7980fa4 - Nielson Santana - Version bump to 0.2.5
+ - 2020-02-18 19:44:42 #ff820ce - Nielson Santana - Refactore usage interface
+ - 2020-02-18 19:07:00 #9b29499 - Nielson Santana - feat: add support to system environment
 
 
 Version 0.2.4:
  - 2020-02-06 16:56:01 #a604a4d - Nielson Santana - Lazy import of StackDriverFormatter
  - 2020-02-06 16:52:44 #ca67e71 - Nielson Santana - Remove pyproject.toml and lazy import of logstash
-
-Version 0.2.3:
-
 
 Version 0.2.2:
  - 2020-02-05 16:45:54 #93794e4 - Nielson Santana - Updates README.md
@@ -25,7 +25,6 @@ Version 0.2.0:
  - 2020-01-29 12:55:29 #837a0b6 - Nielson Santana - chore: update CONTRIBUTORS.md
  - 2020-01-28 16:09:53 -0200 #c2a6e13 - tadashi - chore: add python 3.8 version
  - 2020-01-28 15:05:34 #e889a7c - Nielson Santana - tests: fix test for python==3.5
-
 
 Version 0.1.0
 - 2020-01-28 13:53:16 -0300 - Nielson Santana - chore: disable test for python==3.5
