@@ -72,7 +72,7 @@ class LoggerManager:
 
     def get_logger_logstash(self, name):
         import logstash
-        from .formatter import LogstashFormatter
+        from .providers.logstash import LogstashFormatter
 
         logging_url = config.get_url()
         logging_port = config.get_port()
@@ -95,7 +95,7 @@ class LoggerManager:
         Docs: https://googleapis.dev/python/logging/latest/handlers.html
         """
         import google.cloud.logging
-        from .formatter import StackDriverFormatter
+        from .providers.stackdriver import StackDriverFormatter
 
         logging_environment = config.get_environment()
 
@@ -105,9 +105,11 @@ class LoggerManager:
         client = google.cloud.logging.Client()
 
         handler = client.get_default_handler()
+
         # Setup logger explicitly with this handler
         handler.setFormatter(StackDriverFormatter(
             environment=logging_environment))
+
         logger.setLevel(logging.INFO)
         logger.addHandler(handler)
 
