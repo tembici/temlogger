@@ -1,0 +1,17 @@
+[run]
+branch = True
+omit =
+    */__init__.py
+    *test*.py
+    setup.py
+source = .
+
+[report]
+ignore_errors = True
+omit =
+    */__init__.py
+    *test*.py
+    setup.py
+
+[html]
+directory = coverage
