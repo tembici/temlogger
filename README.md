@@ -1,3 +1,5 @@
+[![Coverage Status](https://codecov.io/gh/tembici/temlogger/branch/master/graph/badge.svg)](https://codecov.io/gh/tembici/temlogger/master)
+
 # TemLogger
 **Temlogger** is a library to capture and send logs to ELK, StackDriver.
 
@@ -133,4 +135,3 @@ import temlogger
 
 test_logger = temlogger.getLogger('python-logger')
 ```
-
