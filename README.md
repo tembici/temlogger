@@ -1,4 +1,4 @@
-[![Coverage Status](https://codecov.io/gh/tembici/temlogger/branch/master/graph/badge.svg)](https://codecov.io/gh/tembici/temlogger/master)
+[![Coverage Status](https://codecov.io/gh/tembici/temlogger/branch/master/graph/badge.svg)](https://codecov.io/gh/tembici/temlogger)
 
 # TemLogger
 **Temlogger** is a library to capture and send logs to ELK, StackDriver.
