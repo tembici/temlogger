@@ -21,7 +21,7 @@ class TestDefaultLogger(unittest.TestCase):
 
         self.assertTrue(isinstance(logger, logging.Logger))
         self.assertEqual(logger.logging_provider, 'default')
-        self.assertEqual(len(logger.handlers), 1)
+        self.assertEqual(len(logger.handlers), 0)
 
 
 class TestLogstashLogger(unittest.TestCase):

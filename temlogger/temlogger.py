@@ -80,21 +80,10 @@ class LoggerManager:
         return func(name, event_handlers)
 
     def get_logger_default(self, name, event_handlers=[]):
-        from .providers.default import DefaultFormatter
 
         logger = logging.getLogger(name)
         logger.setLevel(logging.INFO)
-
-        logging_environment = config.get_environment()
         logger.logging_provider = LoggingProvider.DEFAULT
-
-        handler = logging.StreamHandler()
-
-        handler.setFormatter(DefaultFormatter(
-            environment=logging_environment,
-            event_handlers=event_handlers
-        ))
-        logger.addHandler(handler)
 
         return logger
 

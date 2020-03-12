@@ -23,8 +23,10 @@ class TestDefaultFormatter(unittest.TestCase):
 
         record = logging.makeLogRecord({'msg': log_message})
 
-        message = formater.format(record)
-        self.assertIsInstance(message, dict)
+        str_message = formater.format(record)
+        self.assertIsInstance(str_message, str)
+
+        message = json.loads(str_message)
 
         self.assertEqual(message['message'], log_message)
         self.assertEqual(message['environment'], 'develop')

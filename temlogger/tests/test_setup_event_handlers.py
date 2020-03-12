@@ -27,6 +27,7 @@ class TestEventHandler(unittest.TestCase):
             message['tracker_id'] = 'tracker_id_hex'
             return message
 
+        temlogger.config.set_provider('logstash')
         temlogger.config.setup_event_handlers([add_tracker_id])
 
         logger = temlogger.getLogger('first_handler')
@@ -56,6 +57,7 @@ class TestEventHandler(unittest.TestCase):
             message['tracker_id'] = 'tracker_id_hex'
             return message
 
+        temlogger.config.set_provider('logstash')
         temlogger.config.setup_event_handlers([add_tracker_id])
 
         self.assertIn(add_tracker_id, temlogger.config.get_event_handlers())
@@ -77,6 +79,7 @@ class TestEventHandler(unittest.TestCase):
             message['request_id'] = 'request_id_hex2'
             return message
 
+        temlogger.config.set_provider('logstash')
         temlogger.config.setup_event_handlers([
             tracker_id_param,
             add_request_id_param
@@ -109,6 +112,7 @@ class TestEventHandler(unittest.TestCase):
             message.clear()
             return message
 
+        temlogger.config.set_provider('logstash')
         temlogger.config.setup_event_handlers([clear_keys])
 
         logger = temlogger.getLogger('three_handler')
@@ -129,6 +133,7 @@ class TestEventHandler(unittest.TestCase):
             message.clear()
             return message
 
+        temlogger.config.set_provider('logstash')
         temlogger.config.setup_event_handlers([
             'temlogger.tests.base.add_tracker_id_to_message',
         ])
@@ -164,6 +169,7 @@ class TestEventHandler(unittest.TestCase):
             message['random_key'] = random_key
             return message
 
+        temlogger.config.set_provider('logstash')
         temlogger.config.setup_event_handlers([
             'temlogger.tests.base.add_tracker_id_to_message',
             add_random_key_to_message,
@@ -201,6 +207,7 @@ class TestEventHandler(unittest.TestCase):
             message['random_key'] = random_key
             return message
 
+        temlogger.config.set_provider('logstash')
         logger = temlogger.getLogger('five_handler', event_handlers=[
             add_random_key_to_message_local
         ])
