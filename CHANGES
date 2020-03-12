@@ -1,3 +1,10 @@
+Version 0.3.0:
+ - 2020-03-12 07:31:27 #7d5b352 - Nielson Santana - Implement feature of event handlers (#8)
+ - 2020-03-09 20:04:02 #2b18208 - Nielson Santana - chore: Fix badge link
+ - 2020-03-09 19:53:47 #b359eb2 - Nielson Santana - chore: coverage badge in README.md
+ - 2020-03-06 10:30:57 #a13fad2 - Nielson Santana - MIT License
+ - 2020-03-05 14:55:55 #2de597e - Nielson Santana - Refactor: improves code organization
+
 Version 0.2.5:
  - 2020-02-18 19:47:39 #7980fa4 - Nielson Santana - Version bump to 0.2.5
  - 2020-02-18 19:44:42 #ff820ce - Nielson Santana - Refactore usage interface
