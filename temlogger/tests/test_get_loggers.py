@@ -2,21 +2,10 @@ import logging
 import os
 import unittest
 import temlogger
+
 from unittest import mock
 
-
-def clean_temlogger_config():
-    environments_to_clean = [
-        'TEMLOGGER_PROVIDER',
-        'TEMLOGGER_URL',
-        'TEMLOGGER_PORT'
-        'TEMLOGGER_ENVIRONMENT'
-    ]
-    for env in environments_to_clean:
-        if env in os.environ:
-            del os.environ[env]
-
-    temlogger.config.clear()
+from .base import clean_temlogger_config
 
 
 class TestDefaultLogger(unittest.TestCase):
@@ -32,6 +21,7 @@ class TestDefaultLogger(unittest.TestCase):
 
         self.assertTrue(isinstance(logger, logging.Logger))
         self.assertEqual(logger.logging_provider, 'default')
+        self.assertEqual(len(logger.handlers), 1)
 
 
 class TestLogstashLogger(unittest.TestCase):
@@ -82,6 +72,7 @@ class TestLogstashLogger(unittest.TestCase):
 
         logger = temlogger.getLogger('logstash-3')
 
+        self.assertEqual(len(logger.handlers), 1)
         self.assertEqual(logger.logging_provider, 'logstash')
 
         logger._log = mock.Mock()
@@ -127,6 +118,7 @@ class TestStackDriverLogger(unittest.TestCase):
 
         logger = temlogger.getLogger('stackdriver-2')
 
+        self.assertEqual(len(logger.handlers), 1)
         self.assertEqual(logger.logging_provider, 'stackdriver')
 
         logger._log = mock.Mock()

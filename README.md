@@ -1,7 +1,15 @@
 [![Coverage Status](https://codecov.io/gh/tembici/temlogger/branch/master/graph/badge.svg)](https://codecov.io/gh/tembici/temlogger)
 
 # TemLogger
-**Temlogger** is a library to capture and send logs to ELK, StackDriver.
+**Temlogger** is a library to send logs to ELK, StackDriver(Google Cloud Logging).
+
+## Features
+
+Temlogger gives you:
+
+* Flexibility to send logs to StackDriver(Google Cloud Logging) or ELK (Elastic, Logstash and Kibana).
+* Register events handlers(globally and per logger) to update log entry before send to providers.
+* 98% test coverage.
 
 ## Logging Providers
 
@@ -86,9 +94,9 @@ test_logger.info('temlogger: test with extra fields', extra=extra)
 
 ### Example with StackDriver
 
+[Documentation of how set `GOOGLE_APPLICATION_CREDENTIALS` environment variable](https://cloud.google.com/docs/authentication/getting-started)
 ```bash
 export TEMLOGGER_PROVIDER='stackdriver'
-# https://cloud.google.com/docs/authentication/getting-started
 export GOOGLE_APPLICATION_CREDENTIALS='<path to json>'
 ```
 
@@ -134,4 +142,54 @@ Then in others files such as `views.py`,`models.py` you can use in this way:
 import temlogger
 
 test_logger = temlogger.getLogger('python-logger')
+```
+
+## Event Handlers
+
+This functionality allow register handlers before send log to Logging Providers.
+
+### Register event handlers globally
+
+Is recommended initialize event handlers early as possible, for example in `settings.py` for django.
+The below example shows how register a handler `add_tracker_id_to_message` globally.
+
+```python
+import temlogger
+
+temlogger.config.set_provider('logstash')
+temlogger.config.setup_event_handlers([
+    'temlogger.tests.base.add_tracker_id_to_message',
+])
+
+logger = temlogger.getLogger('python-logger')
+
+extra = {
+    'app_name': 'tembici'
+}
+
+logger.info('test with extra fields', extra=extra)
+```
+
+### Register event handlers per logger
+
+The below example shows how register a handler `add_user_id_key` for one logger.
+
+```python
+import temlogger
+
+def add_user_id_key(message):
+    message['user_id'] = 'User Id'
+    return message
+
+temlogger.config.set_provider('logstash')
+
+logger = temlogger.getLogger('python-logger', event_handlers=[
+    'temlogger.tests.base.add_tracker_id_to_message',
+    add_user_id_key
+])
+extra = {
+    'app_name': 'tembici'
+}
+
+logger.info('test with extra fields', extra=extra)
 ```

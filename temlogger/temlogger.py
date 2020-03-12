@@ -2,6 +2,9 @@ import logging
 import os
 
 
+from .helpers import import_string_list
+
+
 class LoggingProvider:
     STACK_DRIVER = 'stackdriver'
     LOGSTASH = 'logstash'
@@ -13,6 +16,7 @@ class LoggingConfig:
     _url = ''
     _port = ''
     _environment = ''
+    _event_handlers = []
 
     def set_provider(self, value):
         self._provider = value
@@ -38,16 +42,30 @@ class LoggingConfig:
     def get_environment(self):
         return self._environment or os.getenv('TEMLOGGER_ENVIRONMENT', '')
 
+    def get_event_handlers(self):
+        return self._event_handlers
+
+    def setup_event_handlers(self, event_handlers=[]):
+        self._event_handlers = import_string_list(event_handlers)
+
     def clear(self):
         self._provider = ''
         self._url = ''
         self._port = ''
         self._environment = ''
+        self._event_handlers = []
 
 
 class LoggerManager:
 
-    def get_logger(self, name):
+    def __init__(self):
+        self.logger_map = {
+            LoggingProvider.LOGSTASH: self.get_logger_logstash,
+            LoggingProvider.STACK_DRIVER: self.get_logger_stackdriver,
+            LoggingProvider.DEFAULT: self.get_logger_default,
+        }
+
+    def get_logger(self, name, event_handlers=[]):
         logging_provider = config.get_provider()
 
         logger = logging.getLogger(name)
@@ -57,21 +75,31 @@ class LoggerManager:
 
         logger.handlers.clear()
 
-        if logging_provider == LoggingProvider.LOGSTASH:
-            return self.get_logger_logstash(name)
-        elif logging_provider == LoggingProvider.STACK_DRIVER:
-            return self.get_logger_stackdriver(name)
-        return self.get_logger_default(name)
+        func = self.logger_map.get(logging_provider, self.get_logger_default)
 
-    def get_logger_default(self, name):
+        return func(name, event_handlers)
+
+    def get_logger_default(self, name, event_handlers=[]):
+        from .providers.default import DefaultFormatter
+
         logger = logging.getLogger(name)
         logger.setLevel(logging.INFO)
+
+        logging_environment = config.get_environment()
         logger.logging_provider = LoggingProvider.DEFAULT
+
+        handler = logging.StreamHandler()
+
+        handler.setFormatter(DefaultFormatter(
+            environment=logging_environment,
+            event_handlers=event_handlers
+        ))
+        logger.addHandler(handler)
 
         return logger
 
-    def get_logger_logstash(self, name):
-        import logstash
+    def get_logger_logstash(self, name, event_handlers=[]):
+        from logstash import TCPLogstashHandler
         from .providers.logstash import LogstashFormatter
 
         logging_url = config.get_url()
@@ -82,15 +110,16 @@ class LoggerManager:
         logger.logging_provider = LoggingProvider.LOGSTASH
 
         logger.setLevel(logging.INFO)
-        handler = logstash.TCPLogstashHandler(
-            logging_url, logging_port, version=1)
+        handler = TCPLogstashHandler(logging_url, logging_port, version=1)
         handler.setFormatter(LogstashFormatter(
-            environment=logging_environment))
+            environment=logging_environment,
+            event_handlers=event_handlers
+        ))
         logger.addHandler(handler)
 
         return logger
 
-    def get_logger_stackdriver(self, name):
+    def get_logger_stackdriver(self, name, event_handlers=[]):
         """
         Docs: https://googleapis.dev/python/logging/latest/handlers.html
         """
@@ -108,7 +137,9 @@ class LoggerManager:
 
         # Setup logger explicitly with this handler
         handler.setFormatter(StackDriverFormatter(
-            environment=logging_environment))
+            environment=logging_environment,
+            event_handlers=event_handlers)
+        )
 
         logger.setLevel(logging.INFO)
         logger.addHandler(handler)
@@ -120,8 +151,19 @@ config = LoggingConfig()
 logger_manager = LoggerManager()
 
 
-def getLogger(name: str):
-    return logger_manager.get_logger(name)
+def getLogger(name: str, event_handlers=[]):
+    """Creates a logger with .
+
+    :type name: str
+    :param name: the name of the logger to be constructed.
+
+    :type event_handlers: list
+    :param name: list of event handlers
+
+    :rtype: :class:`logging.Logger`
+    :returns: Logger created.
+    """
+    return logger_manager.get_logger(name, event_handlers)
 
 
 __all__ = [
