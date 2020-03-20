@@ -7,7 +7,7 @@ with open('README.rst', 'r') as fh:
     long_description = fh.read()
 
 setup(
-    name='temlogger-test',
+    name='temlogger',
     version=__version__,
     description='Python logging handler for Logstash and StackDriver.',
     long_description=long_description,
