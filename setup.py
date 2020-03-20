@@ -1,22 +1,25 @@
-from distutils.core import setup
+from setuptools import setup
 from setuptools import find_packages
 from temlogger import __version__
 
 
+with open('README.rst', 'r') as fh:
+    long_description = fh.read()
+
 setup(
-    name='temlogger',
-    packages=find_packages(),
+    name='temlogger-test',
     version=__version__,
     description='Python logging handler for Logstash and StackDriver.',
-    long_description=open('README.md').read(),
+    long_description=long_description,
+    long_description_content_type='text/x-rst',
     url='https://github.com/tembici/temlogger',
+    packages=find_packages(),
     classifiers=[
-        'Development Status :: 1 - Beta',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3.6+',
+        'Programming Language :: Python :: 3',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: System :: Logging',
