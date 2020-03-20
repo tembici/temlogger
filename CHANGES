@@ -1,3 +1,6 @@
+Version 0.3b1:
+ - 2020-03-20 12:50:53 #98c2dc4 - Nielson Santana - Preparing temlogger to pypi
+
 Version 0.3.0:
  - 2020-03-12 07:31:27 #7d5b352 - Nielson Santana - Implement feature of event handlers (#8)
  - 2020-03-09 20:04:02 #2b18208 - Nielson Santana - chore: Fix badge link
