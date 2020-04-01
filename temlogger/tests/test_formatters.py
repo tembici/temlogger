@@ -28,6 +28,24 @@ class TestDefaultFormatter(unittest.TestCase):
 
         message = json.loads(str_message)
 
+        self.assertTrue('payload' in message)
+        self.assertEqual(message['message'], log_message)
+        self.assertEqual(message['environment'], 'develop')
+
+    def test_format_with_extra(self):
+        formater = DefaultFormatter(environment='develop')
+        log_message = 'Log entry message'
+
+        record = logging.makeLogRecord({
+            'msg': log_message, 'extra_field': 'Extra Field'}
+        )
+
+        str_message = formater.format(record)
+        message = json.loads(str_message)
+        payload = message['payload']
+
+        self.assertTrue('payload' in message)
+        self.assertEqual(payload['extra_field'], 'Extra Field')
         self.assertEqual(message['message'], log_message)
         self.assertEqual(message['environment'], 'develop')
 
@@ -41,7 +59,6 @@ class TestLogstashFormatter(unittest.TestCase):
         clean_temlogger_config()
 
     def test_format(self):
-
         formater = LogstashFormatter(environment='develop')
         log_message = 'Log entry message'
 
@@ -51,6 +68,24 @@ class TestLogstashFormatter(unittest.TestCase):
         message = json.loads(str_message)
 
         self.assertIsInstance(str_message, str)
+        self.assertTrue('payload' in message)
+        self.assertEqual(message['message'], log_message)
+        self.assertEqual(message['environment'], 'develop')
+
+    def test_format_with_extra(self):
+        formater = LogstashFormatter(environment='develop')
+        log_message = 'Log entry message'
+
+        record = logging.makeLogRecord({
+            'msg': log_message, 'extra_field': 'Extra Field'}
+        )
+
+        str_message = formater.format(record)
+        message = json.loads(str_message)
+        payload = message['payload']
+
+        self.assertTrue('payload' in message)
+        self.assertEqual(payload['extra_field'], 'Extra Field')
         self.assertEqual(message['message'], log_message)
         self.assertEqual(message['environment'], 'develop')
 
@@ -64,7 +99,6 @@ class TestStackDriverFormatter(unittest.TestCase):
         clean_temlogger_config()
 
     def test_format(self):
-
         formater = StackDriverFormatter(environment='develop')
         log_message = 'Log entry message'
 
@@ -72,5 +106,22 @@ class TestStackDriverFormatter(unittest.TestCase):
 
         message = formater.format(record)
 
+        self.assertTrue('payload' in message)
+        self.assertEqual(message['message'], log_message)
+        self.assertEqual(message['environment'], 'develop')
+
+    def test_format_with_extra(self):
+        formater = StackDriverFormatter(environment='develop')
+        log_message = 'Log entry message'
+
+        record = logging.makeLogRecord({
+            'msg': log_message, 'extra_field': 'Extra Field'}
+        )
+
+        message = formater.format(record)
+        payload = message['payload']
+
+        self.assertTrue('payload' in message)
+        self.assertEqual(payload['extra_field'], 'Extra Field')
         self.assertEqual(message['message'], log_message)
         self.assertEqual(message['environment'], 'develop')

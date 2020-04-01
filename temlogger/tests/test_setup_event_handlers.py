@@ -47,7 +47,7 @@ class TestEventHandler(unittest.TestCase):
                 'tracker_id': 'tracker_id_hex',
                 'environment': '', 'level': 'INFO',
                 'logger_name': logger.name,
-                'stack_info': None
+                'payload': {'stack_info': None}
             }
             mock_fwh.assert_called_once_with(expected)
 
@@ -103,7 +103,7 @@ class TestEventHandler(unittest.TestCase):
                 'request_id': 'request_id_hex2',
                 'environment': '', 'level': 'INFO',
                 'logger_name': logger.name,
-                'stack_info': None
+                'payload': {'stack_info': None}
             }
             mock_fwh.assert_called_once_with(expected)
 
@@ -155,7 +155,7 @@ class TestEventHandler(unittest.TestCase):
                 'path': os.path.abspath(__file__),
                 'environment': '', 'level': 'INFO',
                 'logger_name': logger.name,
-                'stack_info': None,
+                'payload': {'stack_info': None},
                 'tracker_id_global': 'tracker_id_value_global',
             }
             mock_fwh.assert_called_once_with(expected)
@@ -192,7 +192,7 @@ class TestEventHandler(unittest.TestCase):
                 'path': os.path.abspath(__file__),
                 'environment': '', 'level': 'INFO',
                 'logger_name': logger.name,
-                'stack_info': None,
+                'payload': {'stack_info': None},
                 'tracker_id_global': 'tracker_id_value_global',
                 'random_key': random_key,
             }
@@ -229,7 +229,7 @@ class TestEventHandler(unittest.TestCase):
                 'environment': '',
                 'level': 'INFO',
                 'logger_name': logger.name,
-                'stack_info': None,
+                'payload': {'stack_info': None},
                 'random_key': random_key,
             }
             mock_fwh.assert_called_once_with(expected)
