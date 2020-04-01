@@ -25,11 +25,7 @@ Temlogger gives you:
 
 ## Instalation
 
-    pip install -e git+https://github.com/tembici/temlogger.git#egg=temlogger
-
-Use this to specify tag version:
-
-    pip install -e git+https://github.com/tembici/temlogger.git@<tag-version>#egg=temlogger
+    pip install temlogger
 
 
 ## Usage
@@ -94,7 +90,7 @@ test_logger.info('temlogger: test with extra fields', extra=extra)
 
 ### Example with StackDriver
 
-[Documentation of how set `GOOGLE_APPLICATION_CREDENTIALS` environment variable](https://cloud.google.com/docs/authentication/getting-started)
+[Documentation of how set GOOGLE_APPLICATION_CREDENTIALS environment variable.](https://cloud.google.com/docs/authentication/getting-started)
 ```bash
 export TEMLOGGER_PROVIDER='stackdriver'
 export GOOGLE_APPLICATION_CREDENTIALS='<path to json>'

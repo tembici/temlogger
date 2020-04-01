@@ -36,13 +36,7 @@ Instalation
 
 ::
 
-    pip install -e git+https://github.com/tembici/temlogger.git#egg=temlogger
-
-Use this to specify tag version:
-
-::
-
-    pip install -e git+https://github.com/tembici/temlogger.git@<tag-version>#egg=temlogger
+    pip install temlogger
 
 Usage
 -----
@@ -108,8 +102,8 @@ Example passing parameters directly to temlogger:
 Example with StackDriver
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-`Documentation of how set ``GOOGLE_APPLICATION_CREDENTIALS`` environment
-variable <https://cloud.google.com/docs/authentication/getting-started>`__
+`Documentation of how set GOOGLE\_APPLICATION\_CREDENTIALS environment
+variable. <https://cloud.google.com/docs/authentication/getting-started>`__
 
 .. code:: bash
 
