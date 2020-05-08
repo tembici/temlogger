@@ -6,6 +6,8 @@ import temlogger
 from unittest import mock
 
 from .base import clean_temlogger_config
+from .base import VALID_GOOGLE_CREDENTIALS
+from ..helpers import encode_file_as_base64
 
 
 class TestDefaultLogger(unittest.TestCase):
@@ -127,3 +129,18 @@ class TestStackDriverLogger(unittest.TestCase):
 
         logger._log.assert_called_once_with(
             logging.INFO, 'StackDriver log', ())
+
+    def test_stackdriver_with_credentials_base64(self):
+        self.valid_cred = encode_file_as_base64(VALID_GOOGLE_CREDENTIALS)
+
+        temlogger.config.set_provider('stackdriver')
+        temlogger.config.set_google_credentials_base64(self.valid_cred)
+        temlogger.getLogger('stackdriver-base64')
+
+    def test_stackdriver_with_credentials_base64_as_environment(self):
+        self.valid_cred = encode_file_as_base64(VALID_GOOGLE_CREDENTIALS)
+
+        os.environ['TEMLOGGER_GOOGLE_CREDENTIALS_BASE64'] = self.valid_cred
+
+        temlogger.config.set_provider('stackdriver')
+        temlogger.getLogger('stackdriver-base64')

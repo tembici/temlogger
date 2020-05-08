@@ -41,7 +41,11 @@ Instalation
 Usage
 -----
 
-Using environment variables:
+How to use temlogger
+~~~~~~~~~~~~~~~~~~~~
+
+Can be used with environment variables:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: bash
 
@@ -72,6 +76,9 @@ Using environment variables:
     }
     test_logger.info('temlogger: test with extra fields', extra=extra)
 
+Can be used with explict parameters:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Example passing parameters directly to temlogger:
 
 .. code:: python
@@ -99,16 +106,47 @@ Example passing parameters directly to temlogger:
     }
     test_logger.info('temlogger: test with extra fields', extra=extra)
 
+Parameters to use with Logstash
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    TEMLOGGER_PROVIDER='logstash'
+    TEMLOGGER_URL='<logstash url>'
+    TEMLOGGER_PORT='<logstash port>'
+    TEMLOGGER_ENVIRONMENT='<your environment>'
+
+Parameters to use with StackDriver
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The variable ``GOOGLE_APPLICATION_CREDENTIALS`` is now deprecated and
+your use isn't recommended. Use ``TEMLOGGER_GOOGLE_CREDENTIALS_BASE64``
+instead.
+
+::
+
+    TEMLOGGER_PROVIDER='stackdriver'
+    TEMLOGGER_ENVIRONMENT='<your environment>'
+    TEMLOGGER_GOOGLE_CREDENTIALS_BASE64='<your google json creds as base64>'
+
+To encode your google credentials use:
+
+.. code:: bash
+
+    base64 <google application credentials path>
+
 Example with StackDriver
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-`Documentation of how set GOOGLE\_APPLICATION\_CREDENTIALS environment
-variable. <https://cloud.google.com/docs/authentication/getting-started>`__
+If you have a Google Credentials, step ahead. If not, create one here
+https://console.cloud.google.com/apis/credentials/serviceaccountkey.
+It's recomended to assign just the needed permissions
+(``logging > write logs``).
 
 .. code:: bash
 
     export TEMLOGGER_PROVIDER='stackdriver'
-    export GOOGLE_APPLICATION_CREDENTIALS='<path to json>'
+    export TEMLOGGER_GOOGLE_CREDENTIALS_BASE64='<your google json creds as base64>'
 
 .. code:: python
 

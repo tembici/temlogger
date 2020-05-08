@@ -2,6 +2,11 @@ import os
 import temlogger
 
 
+path = os.path.dirname(__file__)
+INVALID_GOOGLE_CREDENTIALS = os.path.join(path, 'resources/test_google_credentials_invalid.json')
+VALID_GOOGLE_CREDENTIALS = os.path.join(path, 'resources/test_google_credentials.json')
+
+
 def clean_temlogger_config():
     environments_to_clean = [
         'TEMLOGGER_PROVIDER',
