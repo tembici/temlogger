@@ -1,8 +1,15 @@
 import logging
 import os
-
+import warnings
 
 from .helpers import import_string_list
+from .helpers import load_google_client
+
+
+DEPRECATE_MESSAGE = (
+    'GOOGLE_APPLICATION_CREDENTIALS is deprecated and not recommended.'
+    'Use TEMLOGGER_GOOGLE_CREDENTIALS_BASE64 instead.'
+)
 
 
 class LoggingProvider:
@@ -16,6 +23,7 @@ class LoggingConfig:
     _url = ''
     _port = ''
     _environment = ''
+    _google_credentials_base64 = ''
     _event_handlers = []
 
     def set_provider(self, value):
@@ -41,6 +49,13 @@ class LoggingConfig:
 
     def get_environment(self):
         return self._environment or os.getenv('TEMLOGGER_ENVIRONMENT', '')
+
+    def set_google_credentials_base64(self, value):
+        self._google_credentials_base64 = value
+
+    def get_google_credentials_base64(self):
+        google_cred = self._google_credentials_base64
+        return google_cred or os.getenv('TEMLOGGER_GOOGLE_CREDENTIALS_BASE64', '')
 
     def get_event_handlers(self):
         return self._event_handlers
@@ -116,11 +131,17 @@ class LoggerManager:
         from .providers.stackdriver import StackDriverFormatter
 
         logging_environment = config.get_environment()
+        base64_cred = config.get_google_credentials_base64()
+
+        if base64_cred:
+            scopes = ['https://www.googleapis.com/auth/cloud-platform']
+            client = load_google_client(base64_cred, scopes=scopes)
+        else:
+            client = google.cloud.logging.Client()
+            warnings.warn(DEPRECATE_MESSAGE, DeprecationWarning, stacklevel=2)
 
         logger = logging.getLogger(name)
         logger.logging_provider = LoggingProvider.STACK_DRIVER
-
-        client = google.cloud.logging.Client()
 
         handler = client.get_default_handler()
 
