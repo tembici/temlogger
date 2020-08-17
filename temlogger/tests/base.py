@@ -12,7 +12,8 @@ def clean_temlogger_config():
         'TEMLOGGER_PROVIDER',
         'TEMLOGGER_URL',
         'TEMLOGGER_PORT'
-        'TEMLOGGER_ENVIRONMENT'
+        'TEMLOGGER_ENVIRONMENT',
+        'TEMLOGGER_LOG_LEVEL',
     ]
     for env in environments_to_clean:
         if env in os.environ:
