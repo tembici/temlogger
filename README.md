@@ -7,7 +7,10 @@
 
 Temlogger gives you:
 
-* Flexibility to send logs to StackDriver(Google Cloud Logging) or ELK (Elastic, Logstash and Kibana).
+* Flexibility to send logs:
+    - StackDriver(Google Cloud Logging)
+    - ELK (Elastic, Logstash and Kibana)
+    - Console (Default logging output)
 * Register events handlers(globally and per logger) to update log entry before send to providers.
 * 98% test coverage.
 
@@ -15,6 +18,7 @@ Temlogger gives you:
 
 * `logstash` (ELK)
 * `stackdriver` (Google StackDriver)
+* `console` (Display logs on Console)
 * `default` (don't send logs)
 
 
@@ -92,7 +96,7 @@ extra = {
 test_logger.info('temlogger: test with extra fields', extra=extra)
 ```
 
-### Parameters to use with Logstash
+### Parameters to use with Logstash Provider
 
     export TEMLOGGER_PROVIDER='logstash'
     export TEMLOGGER_URL='<logstash url>'
@@ -100,7 +104,7 @@ test_logger.info('temlogger: test with extra fields', extra=extra)
     export TEMLOGGER_ENVIRONMENT='<your environment>'
 
 
-### Parameters to use with StackDriver
+### Parameters to use with StackDriver Provider
 The variable `GOOGLE_APPLICATION_CREDENTIALS` is now deprecated and your use isn't recommended. Use `TEMLOGGER_GOOGLE_CREDENTIALS_BASE64` instead. 
 
     export TEMLOGGER_PROVIDER='stackdriver'
@@ -112,6 +116,9 @@ To encode your google credentials use:
 ```bash
 base64 <google application credentials path>
 ```
+### Parameters to use with Console Provider
+
+    export TEMLOGGER_PROVIDER='console'
 
 ### Example with StackDriver
 
@@ -166,6 +173,30 @@ extra = {
     'test_float': 1.23,
     'test_integer': 123,
     'test_list': [1, 2, '3'],
+}
+logger.info('temlogger: test with extra fields', extra=extra)
+```
+
+
+### Example with Console
+
+```bash
+export TEMLOGGER_PROVIDER='console'
+```
+
+```python
+import sys
+import temlogger
+
+logger = temlogger.getLogger('python-console-logger')
+
+logger.info('python-logstash: test logstash info message.')
+
+# add extra field to log message
+extra = {
+    'test_string': 'python version: ' + repr(sys.version_info),
+    'test_boolean': True,
+    'test_dict': {'a': 1, 'b': 'c'},
 }
 logger.info('temlogger: test with extra fields', extra=extra)
 ```

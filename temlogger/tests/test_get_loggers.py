@@ -144,3 +144,49 @@ class TestStackDriverLogger(unittest.TestCase):
 
         temlogger.config.set_provider('stackdriver')
         temlogger.getLogger('stackdriver-base64')
+
+
+class TestConsoleLogger(unittest.TestCase):
+
+    def setUp(self):
+        """
+        Clean config between tests
+        """
+        clean_temlogger_config()
+
+    def test_get_console_logger_passing_envs_by_environ(self):
+        os.environ['TEMLOGGER_PROVIDER'] = 'console'
+
+        logger = temlogger.getLogger('console-logger-1')
+
+        self.assertTrue(isinstance(logger, logging.Logger))
+        self.assertEqual(logger.logging_provider, 'console')
+
+    def test_get_console_logger_passing_envs_as_parameter(self):
+        temlogger.config.set_provider('console')
+
+        logger = temlogger.getLogger('console-logger-2')
+        self.assertEqual(logger.logging_provider, 'console')
+
+    def test_get_console_logger_and_assert_log_was_sent_out(self):
+        import sys
+        temlogger.config.set_provider('console')
+
+        logger = temlogger.getLogger('console-3')
+
+        self.assertEqual(len(logger.handlers), 1)
+        self.assertEqual(logger.logging_provider, 'console')
+
+        log_message = 'Console log entry message'
+        log_record = logging.makeLogRecord({'msg': log_message})
+
+        handler = logger.handlers[0]
+
+        handler.emit = mock.Mock()
+
+        logger.info(log_message)
+
+        # handler.emit calls handler.stream(sys.stderror.write) to write logs
+        assert handler.stream == sys.stderr
+        handler.emit.assert_called_once()
+        self.assertTrue(log_message in str(handler.emit.call_args_list))

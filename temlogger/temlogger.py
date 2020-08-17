@@ -15,6 +15,7 @@ DEPRECATE_MESSAGE = (
 class LoggingProvider:
     STACK_DRIVER = 'stackdriver'
     LOGSTASH = 'logstash'
+    CONSOLE = 'console'
     DEFAULT = 'default'
 
 
@@ -68,6 +69,7 @@ class LoggingConfig:
         self._url = ''
         self._port = ''
         self._environment = ''
+        self._google_credentials_base64 = ''
         self._event_handlers = []
 
 
@@ -78,6 +80,7 @@ class LoggerManager:
             LoggingProvider.LOGSTASH: self.get_logger_logstash,
             LoggingProvider.STACK_DRIVER: self.get_logger_stackdriver,
             LoggingProvider.DEFAULT: self.get_logger_default,
+            LoggingProvider.CONSOLE: self.get_logger_console,
         }
 
     def get_logger(self, name, event_handlers=[]):
@@ -99,6 +102,24 @@ class LoggerManager:
         logger = logging.getLogger(name)
         logger.setLevel(logging.INFO)
         logger.logging_provider = LoggingProvider.DEFAULT
+
+        return logger
+
+    def get_logger_console(self, name, event_handlers=[]):
+        from .providers.console import ConsoleFormatter
+
+        logging_environment = config.get_environment()
+
+        logger = logging.getLogger(name)
+        logger.setLevel(logging.INFO)
+        logger.logging_provider = LoggingProvider.CONSOLE
+
+        handler = logging.StreamHandler()
+        handler.setFormatter(ConsoleFormatter(
+            environment=logging_environment,
+            event_handlers=event_handlers
+        ))
+        logger.addHandler(handler)
 
         return logger
 
