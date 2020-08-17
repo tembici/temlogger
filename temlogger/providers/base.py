@@ -38,7 +38,8 @@ class FormatterBase(LogstashFormatterBase):
         }
 
         # Add extra fields
-        message.update(payload=self.get_extra_fields(record))
+        payload_fields = self.get_extra_fields(record)
+        message.update(payload=payload_fields)
 
         # If exception, add debug info
         if record.exc_info:
