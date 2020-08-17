@@ -28,6 +28,8 @@ class TestEventHandler(unittest.TestCase):
             return message
 
         temlogger.config.set_provider('logstash')
+        temlogger.config.set_app_name('test-app-name')
+        temlogger.config.set_environment('local')
         temlogger.config.setup_event_handlers([add_tracker_id])
 
         logger = temlogger.getLogger('first_handler')
@@ -45,7 +47,9 @@ class TestEventHandler(unittest.TestCase):
                 'host': socket.gethostname(),
                 'path': os.path.abspath(__file__),
                 'tracker_id': 'tracker_id_hex',
-                'environment': '', 'level': 'INFO',
+                'environment': 'local', 
+                'level': 'INFO',
+                'app_name': 'test-app-name',
                 'logger_name': logger.name,
                 'payload': {'stack_info': None}
             }
@@ -80,6 +84,9 @@ class TestEventHandler(unittest.TestCase):
             return message
 
         temlogger.config.set_provider('logstash')
+        temlogger.config.set_app_name('test-app-name')
+        temlogger.config.set_environment('local')
+
         temlogger.config.setup_event_handlers([
             tracker_id_param,
             add_request_id_param
@@ -101,7 +108,9 @@ class TestEventHandler(unittest.TestCase):
                 'path': os.path.abspath(__file__),
                 'tracker_id': 'tracker_id_hex',
                 'request_id': 'request_id_hex2',
-                'environment': '', 'level': 'INFO',
+                'environment': 'local', 
+                'level': 'INFO',
+                'app_name': 'test-app-name',
                 'logger_name': logger.name,
                 'payload': {'stack_info': None}
             }
@@ -134,6 +143,9 @@ class TestEventHandler(unittest.TestCase):
             return message
 
         temlogger.config.set_provider('logstash')
+        temlogger.config.set_app_name('test-app-name')
+        temlogger.config.set_environment('local')
+
         temlogger.config.setup_event_handlers([
             'temlogger.tests.base.add_tracker_id_to_message',
         ])
@@ -153,7 +165,9 @@ class TestEventHandler(unittest.TestCase):
                 'message': logger_message,
                 'host': socket.gethostname(),
                 'path': os.path.abspath(__file__),
-                'environment': '', 'level': 'INFO',
+                'environment': 'local', 
+                'level': 'INFO',
+                'app_name': 'test-app-name',
                 'logger_name': logger.name,
                 'payload': {'stack_info': None},
                 'tracker_id_global': 'tracker_id_value_global',
@@ -170,6 +184,9 @@ class TestEventHandler(unittest.TestCase):
             return message
 
         temlogger.config.set_provider('logstash')
+        temlogger.config.set_app_name('test-app-name')
+        temlogger.config.set_environment('local')
+
         temlogger.config.setup_event_handlers([
             'temlogger.tests.base.add_tracker_id_to_message',
             add_random_key_to_message,
@@ -190,7 +207,9 @@ class TestEventHandler(unittest.TestCase):
                 'message': logger_message,
                 'host': socket.gethostname(),
                 'path': os.path.abspath(__file__),
-                'environment': '', 'level': 'INFO',
+                'environment': 'local', 
+                'level': 'INFO',
+                'app_name': 'test-app-name',
                 'logger_name': logger.name,
                 'payload': {'stack_info': None},
                 'tracker_id_global': 'tracker_id_value_global',
@@ -208,6 +227,9 @@ class TestEventHandler(unittest.TestCase):
             return message
 
         temlogger.config.set_provider('logstash')
+        temlogger.config.set_app_name('test-app-name')
+        temlogger.config.set_environment('local')
+
         logger = temlogger.getLogger('five_handler', event_handlers=[
             add_random_key_to_message_local
         ])
@@ -226,8 +248,9 @@ class TestEventHandler(unittest.TestCase):
                 'message': logger_message,
                 'host': socket.gethostname(),
                 'path': os.path.abspath(__file__),
-                'environment': '',
+                'environment': 'local', 
                 'level': 'INFO',
+                'app_name': 'test-app-name',
                 'logger_name': logger.name,
                 'payload': {'stack_info': None},
                 'random_key': random_key,

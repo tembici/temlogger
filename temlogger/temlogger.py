@@ -29,6 +29,7 @@ class LoggingConfig:
     _google_credentials_base64 = ''
     _event_handlers = []
     _log_level = ''
+    _app_name = ''
 
     def set_provider(self, value):
         self._provider = value
@@ -82,7 +83,13 @@ class LoggingConfig:
         log_level_upper = self.get_log_level().upper()
         return logging.getLevelName(log_level_upper)
 
-    def clear(self):
+    def set_app_name(self, value):
+        self._app_name = value
+
+    def get_app_name(self):
+        return self._app_name or os.getenv('TEMLOGGER_APP_NAME', '')
+
+    def reset(self):
         self._provider = ''
         self._url = ''
         self._port = ''
@@ -90,6 +97,7 @@ class LoggingConfig:
         self._google_credentials_base64 = ''
         self._event_handlers = []
         self._log_level = ''
+        self._app_name = ''
 
 
 class LoggerManager:
@@ -128,6 +136,7 @@ class LoggerManager:
         from .providers.console import ConsoleFormatter
 
         logging_environment = config.get_environment()
+        app_name = config.get_app_name()
 
         logger = logging.getLogger(name)
         logger.setLevel(config.get_log_level_parsed())
@@ -135,6 +144,7 @@ class LoggerManager:
 
         handler = logging.StreamHandler()
         handler.setFormatter(ConsoleFormatter(
+            app_name=app_name,
             environment=logging_environment,
             event_handlers=event_handlers
         ))
@@ -149,6 +159,7 @@ class LoggerManager:
         logging_url = config.get_url()
         logging_port = config.get_port()
         logging_environment = config.get_environment()
+        app_name = config.get_app_name()
 
         logger = logging.getLogger(name)
         logger.setLevel(config.get_log_level_parsed())
@@ -156,6 +167,7 @@ class LoggerManager:
 
         handler = TCPLogstashHandler(logging_url, logging_port, version=1)
         handler.setFormatter(LogstashFormatter(
+            app_name=app_name,
             environment=logging_environment,
             event_handlers=event_handlers
         ))
@@ -170,6 +182,7 @@ class LoggerManager:
         import google.cloud.logging
         from .providers.stackdriver import StackDriverFormatter
 
+        app_name = config.get_app_name()
         logging_environment = config.get_environment()
         base64_cred = config.get_google_credentials_base64()
 
@@ -188,6 +201,7 @@ class LoggerManager:
 
         # Setup logger explicitly with this handler
         handler.setFormatter(StackDriverFormatter(
+            app_name=app_name,
             environment=logging_environment,
             event_handlers=event_handlers)
         )
