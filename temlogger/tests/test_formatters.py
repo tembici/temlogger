@@ -50,6 +50,25 @@ class TestDefaultFormatter(unittest.TestCase):
         self.assertEqual(message['message'], log_message)
         self.assertEqual(message['environment'], 'develop')
 
+    def test_format_with_app_name_and_extra(self):
+        formater = StackDriverFormatter(
+            app_name='stackdriver-app', environment='develop'
+        )
+        log_message = 'Log entry message'
+
+        record = logging.makeLogRecord({
+            'msg': log_message, 'extra_field': 'Extra Field'}
+        )
+
+        message = formater.format(record)
+        payload = message['payload']
+
+        self.assertTrue('payload' in message)
+        self.assertEqual(payload['extra_field'], 'Extra Field')
+        self.assertEqual(message['message'], log_message)
+        self.assertEqual(message['environment'], 'develop')
+        self.assertEqual(message['app_name'], 'stackdriver-app')
+
 
 class TestLogstashFormatter(unittest.TestCase):
 

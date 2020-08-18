@@ -11,6 +11,8 @@ DEPRECATE_MESSAGE = (
     'Use TEMLOGGER_GOOGLE_CREDENTIALS_BASE64 instead.'
 )
 
+DEFAULT_LOG_LEVEL = 'INFO'
+
 
 class LoggingProvider:
     STACK_DRIVER = 'stackdriver'
@@ -26,12 +28,15 @@ class LoggingConfig:
     _environment = ''
     _google_credentials_base64 = ''
     _event_handlers = []
+    _log_level = ''
+    _app_name = ''
 
     def set_provider(self, value):
         self._provider = value
 
     def get_provider(self):
-        return self._provider.lower() or os.getenv('TEMLOGGER_PROVIDER', '').lower()
+        provider = self._provider or os.getenv('TEMLOGGER_PROVIDER', '')
+        return (provider or LoggingProvider.DEFAULT).lower()
 
     def set_url(self, value):
         self._url = value
@@ -64,13 +69,35 @@ class LoggingConfig:
     def setup_event_handlers(self, event_handlers=[]):
         self._event_handlers = import_string_list(event_handlers)
 
-    def clear(self):
+    def set_log_level(self, value):
+        """Acceptable parameters: DEBUG, INFO, WARNING, ERROR, FATAL, CRITICAL"""
+        self._log_level = value
+
+    def get_log_level(self):
+        env_log_level = os.getenv('TEMLOGGER_LOG_LEVEL', '')
+        log_level = self._log_level or env_log_level
+        return (log_level or DEFAULT_LOG_LEVEL).upper()
+
+    def get_log_level_parsed(self):
+        """Return instance logging.INFO"""
+        log_level_upper = self.get_log_level().upper()
+        return logging.getLevelName(log_level_upper)
+
+    def set_app_name(self, value):
+        self._app_name = value
+
+    def get_app_name(self):
+        return self._app_name or os.getenv('TEMLOGGER_APP_NAME', '')
+
+    def reset(self):
         self._provider = ''
         self._url = ''
         self._port = ''
         self._environment = ''
         self._google_credentials_base64 = ''
         self._event_handlers = []
+        self._log_level = ''
+        self._app_name = ''
 
 
 class LoggerManager:
@@ -100,7 +127,7 @@ class LoggerManager:
     def get_logger_default(self, name, event_handlers=[]):
 
         logger = logging.getLogger(name)
-        logger.setLevel(logging.INFO)
+        logger.setLevel(config.get_log_level_parsed())
         logger.logging_provider = LoggingProvider.DEFAULT
 
         return logger
@@ -109,13 +136,15 @@ class LoggerManager:
         from .providers.console import ConsoleFormatter
 
         logging_environment = config.get_environment()
+        app_name = config.get_app_name()
 
         logger = logging.getLogger(name)
-        logger.setLevel(logging.INFO)
+        logger.setLevel(config.get_log_level_parsed())
         logger.logging_provider = LoggingProvider.CONSOLE
 
         handler = logging.StreamHandler()
         handler.setFormatter(ConsoleFormatter(
+            app_name=app_name,
             environment=logging_environment,
             event_handlers=event_handlers
         ))
@@ -130,13 +159,15 @@ class LoggerManager:
         logging_url = config.get_url()
         logging_port = config.get_port()
         logging_environment = config.get_environment()
+        app_name = config.get_app_name()
 
         logger = logging.getLogger(name)
+        logger.setLevel(config.get_log_level_parsed())
         logger.logging_provider = LoggingProvider.LOGSTASH
 
-        logger.setLevel(logging.INFO)
         handler = TCPLogstashHandler(logging_url, logging_port, version=1)
         handler.setFormatter(LogstashFormatter(
+            app_name=app_name,
             environment=logging_environment,
             event_handlers=event_handlers
         ))
@@ -151,6 +182,7 @@ class LoggerManager:
         import google.cloud.logging
         from .providers.stackdriver import StackDriverFormatter
 
+        app_name = config.get_app_name()
         logging_environment = config.get_environment()
         base64_cred = config.get_google_credentials_base64()
 
@@ -162,17 +194,18 @@ class LoggerManager:
             warnings.warn(DEPRECATE_MESSAGE, DeprecationWarning, stacklevel=2)
 
         logger = logging.getLogger(name)
+        logger.setLevel(config.get_log_level_parsed())
         logger.logging_provider = LoggingProvider.STACK_DRIVER
 
         handler = client.get_default_handler()
 
         # Setup logger explicitly with this handler
         handler.setFormatter(StackDriverFormatter(
+            app_name=app_name,
             environment=logging_environment,
             event_handlers=event_handlers)
         )
 
-        logger.setLevel(logging.INFO)
         logger.addHandler(handler)
 
         return logger

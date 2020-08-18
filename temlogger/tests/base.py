@@ -12,13 +12,15 @@ def clean_temlogger_config():
         'TEMLOGGER_PROVIDER',
         'TEMLOGGER_URL',
         'TEMLOGGER_PORT'
-        'TEMLOGGER_ENVIRONMENT'
+        'TEMLOGGER_ENVIRONMENT',
+        'TEMLOGGER_LOG_LEVEL',
+        'TEMLOGGER_APP_NAME',
     ]
     for env in environments_to_clean:
         if env in os.environ:
             del os.environ[env]
 
-    temlogger.config.clear()
+    temlogger.config.reset()
 
 
 def add_tracker_id_to_message(message):

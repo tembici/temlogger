@@ -8,9 +8,10 @@ from ..helpers import import_string_list
 
 class FormatterBase(LogstashFormatterBase):
 
-    def __init__(self, fqdn=False, environment='', event_handlers=[],
-                 *args, **kwargs):
+    def __init__(self, fqdn=False, app_name='', environment='',
+                 event_handlers=[], *args, **kwargs):
         super().__init__(message_type='', fqdn=fqdn, *args, **kwargs)
+        self.app_name = app_name
         self.environment = environment
         self.event_handlers = import_string_list(event_handlers)
 
@@ -31,6 +32,7 @@ class FormatterBase(LogstashFormatterBase):
             'host': self.host,
             'path': record.pathname,
             'environment': self.environment,
+            'app_name': self.app_name,
 
             # Extra Fields
             'level': record.levelname,
