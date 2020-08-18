@@ -13,7 +13,7 @@ Temlogger gives you:
     - ELK (Elastic, Logstash and Kibana)
     - Console (Default logging output)
 * Register events handlers(globally and per logger) to update log entry before send to providers.
-* 98% test coverage.
+* 99% test coverage.
 
 ## Logging Providers
 
