@@ -1,6 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 from temlogger import __version__
+from temlogger import __license__
 
 
 with open('README.rst', 'r') as fh:
@@ -9,6 +10,9 @@ with open('README.rst', 'r') as fh:
 setup(
     name='temlogger',
     version=__version__,
+    license=__license__,
+    author='Nielson Santana',
+    author_email='nielsonnas@gmail.com',
     description='Python logging handler for Logstash and StackDriver.',
     long_description=long_description,
     long_description_content_type='text/x-rst',
