@@ -1,0 +1,7 @@
+pandoc<1.1
+setuptools
+wheel
+twine
+pytest
+pytest-cov
+codecov
