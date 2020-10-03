@@ -39,6 +39,12 @@ if [ -f VERSION ]; then
     echo "" >> tmpfile
     cat CHANGES >> tmpfile
     mv tmpfile CHANGES
+    read -p "Confirm release [$SUGGESTED_VERSION] [YES or NO]: " INPUT_CONFIRM_RELEASE
+    if [ "$INPUT_CONFIRM_RELEASE" != "YES" ]; then
+        git checkout VERSION
+        echo "Exiting."
+        exit 0
+    fi
     git add CHANGES VERSION
     git commit -m "Version bump to $INPUT_STRING"
     git tag -a -m "Tagging version $INPUT_STRING" "v$INPUT_STRING"
