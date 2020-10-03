@@ -1,0 +1,7 @@
+pandoc<1.1
+setuptools
+wheel<0.36
+twine<3.3.0
+pytest<6.2.0
+pytest-cov<2.11
+codecov<2.2.0

@@ -3,24 +3,26 @@ name: Python package
 on: [push]
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
+      max-parallel: 3
       matrix:
         python-version: [3.6, 3.7, 3.8]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r requirements.txt -r requirements-test.txt
+
     - name: Lint with flake8
       run: |
         pip install flake8
@@ -28,8 +30,60 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
     - name: Test with pytest
       run: |
-        pip install pytest pytest-cov codecov
         pytest --cov=.
         codecov --token=3edf28e0-b189-462e-b0b1-72ac53c8159d
+
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Install dependencies
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-test.txt
+
+      - name: Build dist package
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+        run: |
+          python setup.py sdist bdist_wheel
+
+      # Publish on oficial pypi.org
+      - name: Publish package to Pypi
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+        run: |
+          twine check dist/*
+          twine upload dist/* --non-interactive --repository-url=$REPOSITORY_URL --username=__token__ --password=$PASSWORD
+        env:
+          PASSWORD: ${{ secrets.pypi_password }}
+          REPOSITORY_URL: https://upload.pypi.org/legacy/
+
+      # Publish on test.pypi.org
+      - name: Rename package to temlogger-test
+        if: contains('refs/heads/publish-on-test.pypi.org', github.ref)
+        run: |
+          sed -i -e "s/name='temlogger.*/name='temlogger-test',/g" setup.py
+
+      - name: Build dist package
+        if: contains('refs/heads/publish-on-test.pypi.org', github.ref)
+        run: |
+          python setup.py sdist bdist_wheel
+
+      - name: Publish package to TestPypi
+        if: contains('refs/heads/publish-on-test.pypi.org', github.ref)
+        run: |
+          twine check dist/*
+          twine upload dist/* --non-interactive --repository-url=$REPOSITORY_URL --username=__token__ --password=$PASSWORD
+        env:
+          PASSWORD: ${{ secrets.test_pypi_password }}
+          REPOSITORY_URL: https://test.pypi.org/legacy/
