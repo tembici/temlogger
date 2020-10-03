@@ -1,5 +1,19 @@
-Version 0.5.0a0:
-
+Version 0.5.0:
+ - 2020-10-03 10:59:55 #687fc16 - Nielson Santana - Version bump to 0.5.0a0
+ - 2020-10-03 10:57:34 #4f9aab7 - Nielson Santana - Auto publish releases on tag push (#2)
+ - 2020-08-18 07:46:44 #552a009 - Nielson Santana - Update temlogger to 99% test coverage on README.md
+ - 2020-08-18 07:31:02 #1e08008 - Nielson Santana - Define MIT license on setup.py
+ - 2020-08-17 12:34:42 #2855160 - Nielson Santana - Drop support for python 3.5
+ - 2020-08-17 11:35:28 #f828f35 - Nielson Santana - Intruduce environment variable to set Application Name (#1)
+ - 2020-08-17 09:40:21 #6adfbe6 - Nielson Santana - Add feature of configurable log-level
+ - 2020-08-17 06:06:06 #53d81da - Nielson Santana - Add Console provider to print logs on local console
+ - 2020-05-08 10:22:18 #fa232ca - Nielson Santana - Add support to Google Application Credentials as base64 (#13)
+ - 2020-05-08 10:07:00 #263d315 - Nielson Santana - Version bump to 0.4.0
+ - 2020-05-08 10:03:58 #d902e58 - Nielson Santana - Version bump to 0.4.0
+ - 2020-05-08 10:03:27 #d3745ec - Nielson Santana - Version bump to 0.4.0
+ - 2020-05-08 10:02:50 #00c6cf1 - Nielson Santana - Version bump to 0.4.0
+ - 2020-05-08 10:02:20 #a1e03e7 - Nielson Santana - Version bump to 0.4.0
+ - 2020-05-08 09:58:30 #aca66d6 - Nielson Santana - Add support to Google Application Credentials as base64
 
 Version 0.4.0:
  - 2020-05-08 10:03:27 #d3745ec - Nielson Santana - Version bump to 0.4.0
