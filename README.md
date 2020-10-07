@@ -50,9 +50,11 @@ export TEMLOGGER_LOG_LEVEL='INFO'
 import sys
 import temlogger
 
-test_logger.info('python-console: test console info message.')
-test_logger.debug('python-console: debug message will not be displayed. Change level to "DEBUG"')
-test_logger.warning('python-console: test console warning message.')
+logger = temlogger.getLogger('python-console')
+
+logger.info('python-console: print on console info message.')
+logger.debug('python-console: debug message will not be displayed. Change level to "DEBUG"')
+logger.warning('python-console: print on console warning message.')
 ```
 
 Example of configuration programmatically to Console provider:
@@ -66,9 +68,11 @@ temlogger.config.set_provider('console')
 temlogger.config.set_environment('staging')
 temlogger.config.set_log_level('INFO')
 
-test_logger.info('python-console: test console info message.')
-test_logger.debug('python-console: debug message will not be displayed. Change level to "DEBUG"')
-test_logger.warning('python-console: test console warning message.')
+logger = temlogger.getLogger('python-console')
+
+logger.info('python-console: print on console info message.')
+logger.debug('python-console: debug message will not be displayed. Change level to "DEBUG"')
+logger.warning('python-console: print on console warning message.')
 ```
 
 ### Parameters to setup Logstash Provider
@@ -97,6 +101,7 @@ base64 <google application credentials path>
 ```
 ### Parameters to setup Console Provider
 
+    export TEMLOGGER_APP_NAME='your-app-name'
     export TEMLOGGER_PROVIDER='console'
     export TEMLOGGER_ENVIRONMENT='<your environment>'
     export TEMLOGGER_LOG_LEVEL='INFO'
